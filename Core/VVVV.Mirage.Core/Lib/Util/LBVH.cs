@@ -52,17 +52,17 @@ namespace VVVV.Mirage.Lib.Util
             LeafCount = capacity;
             InternalCount = capacity > 0 ? capacity - 1 : 0;
             Nodes = new Node[Count];
-            internalIndex = 0;
+            internalIndex = InternalCount;
         }
 
         public void Reset()
         {
-            internalIndex = 0;
+            internalIndex = InternalCount;
         }
 
         public uint GetNextInternalNodeIndex()
         {
-            return internalIndex++;
+            return --internalIndex;
         }
     }
 }

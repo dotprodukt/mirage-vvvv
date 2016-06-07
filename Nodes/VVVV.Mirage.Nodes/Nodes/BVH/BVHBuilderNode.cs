@@ -37,6 +37,9 @@ namespace VVVV.Mirage.Nodes
         [Output("Box Transforms")]
         protected ISpread<Matrix4x4> FBoxes;
 
+        [Output("Leaf Offset")]
+        protected ISpread<int> FLeafOffset;
+
         [Output("Is Valid")]
         protected ISpread<bool> FValid;
 
@@ -55,10 +58,11 @@ namespace VVVV.Mirage.Nodes
                 FOutput[0] = new DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>();
             }
 
-            if (FApply[0] || FFirst)
+            if ((FApply[0] || FFirst) && FEntities.SliceCount>0)
             {
                 BVHBuilder builder = new BVHBuilder();
                 data = builder.Build(FEntities.ToList());
+                FLeafOffset[0] = FEntities.SliceCount - 1;
 
                 FBoxes.SliceCount = data.Length;
                 for (int i = 0; i < data.Length; ++i)

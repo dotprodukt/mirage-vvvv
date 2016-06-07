@@ -27,19 +27,23 @@ namespace VVVV.Mirage.Nodes.Scene
         [Output("Entity")]
         protected ISpread<AbstractEntity> FOutput;
 
+        private int LastSliceCount = 0;
+
         public void Evaluate(int spreadMax)
         {
             FOutput.SliceCount = spreadMax;
 
             for (int i = 0; i < spreadMax; ++i)
             {
-                if (FOutput[i] == null)
+                if (FOutput[i] == null || i>=LastSliceCount)
                     FOutput[i] = new AbstractEntity();
 
                 FOutput[i].Type = FType[i];
                 FOutput[i].Bounds = new AABB(FMin[i], FMax[i]);
                 FOutput[i].Transform = FTransform[i];
             }
+
+            LastSliceCount = FOutput.SliceCount;
         }
     }
 }
