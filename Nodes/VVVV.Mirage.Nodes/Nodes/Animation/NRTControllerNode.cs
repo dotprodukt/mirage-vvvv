@@ -8,7 +8,7 @@ using VVVV.PluginInterfaces.V2;
 
 namespace VVVV.Mirage.Nodes
 {
-    [PluginInfo(Name = "Controller", Category = "Animation", Version = "NRT", Help = "Helps coordinate NRT rendering processes.", Tags = "", Author="dotprodukt")]
+    [PluginInfo(Name = "Controller", Category = "Animation", Version = "NRT", Help = "Helps coordinate NRT rendering processes.", Tags = "Mirage", Author="dotprodukt")]
     public class NRTControllerNode : IPluginEvaluate
     {
         #region fields & pins

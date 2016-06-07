@@ -19,7 +19,7 @@ using FeralTic.DX11.Resources;
 //using SlimDX;
 namespace VVVV.Mirage.Nodes
 {
-    [PluginInfo(Name = "BVH", Category = "DX11", Version = "Buffer", Help = "Contructs a LBVH Buffer", Tags = "", Author = "dotprodukt")]
+    [PluginInfo(Name = "BVH", Category = "Mirage", Version = "Buffer", Help = "Contructs a LBVH Buffer.", Tags = "", Author = "dotprodukt")]
     class BVHBuilderNode : IPluginEvaluate, IDX11ResourceProvider, IDisposable
     {
         [Input("Entities")]
