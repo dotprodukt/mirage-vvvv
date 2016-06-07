@@ -6,21 +6,24 @@ using System.Threading.Tasks;
 
 using VVVV.PluginInterfaces.V1;
 using VVVV.PluginInterfaces.V2;
-using VVVV.DX11.Nodes;
-using VVVV.Mirage.Lib.Util;
-using VVVV.Mirage.Lib.Scene;
+using VVVV.Utils.VMath;
 
 using SlimDX.Direct3D11;
 
-using VVVV.DX11;
-using VVVV.DX11.Lib.Devices;
 using FeralTic.DX11;
 using FeralTic.DX11.Resources;
-//using SlimDX;
+
+using VVVV.DX11;
+using VVVV.DX11.Lib.Devices;
+using VVVV.DX11.Nodes;
+
+using VVVV.Mirage.Lib.Util;
+using VVVV.Mirage.Lib.Scene;
+
 namespace VVVV.Mirage.Nodes
 {
     [PluginInfo(Name = "BVH", Category = "Mirage", Version = "Buffer", Help = "Contructs a LBVH Buffer.", Tags = "", Author = "dotprodukt")]
-    class BVHBuilderNode : IPluginEvaluate, IDX11ResourceProvider, IDisposable
+    public class BVHBuilderNode : IPluginEvaluate, IDX11ResourceProvider, IDisposable
     {
         [Input("Entities")]
         protected ISpread<IEntity> FEntities;
@@ -30,6 +33,9 @@ namespace VVVV.Mirage.Nodes
 
         [Output("Node Buffer", IsSingle=true)]
         protected ISpread<DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>> FOutput;
+
+        [Output("Box Transforms")]
+        protected ISpread<Matrix4x4> FBoxes;
 
         [Output("Is Valid")]
         protected ISpread<bool> FValid;
@@ -41,22 +47,31 @@ namespace VVVV.Mirage.Nodes
 
         public void Evaluate(int spreadMax)
         {
-            this.FOutput.SliceCount = 1;
-            this.FInvalidate = false;
+            FOutput.SliceCount = 1;
+            FInvalidate = false;
 
-            if (this.FOutput[0] == null)
+            if (FOutput[0] == null)
             {
-                this.FOutput[0] = new DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>();
+                FOutput[0] = new DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>();
             }
 
-            if (this.FApply[0] || this.FFirst)
+            if (FApply[0] || FFirst)
             {
                 BVHBuilder builder = new BVHBuilder();
                 data = builder.Build(FEntities.ToList());
 
-                this.FInvalidate = true;
-                this.FFirst = false;
-                this.FOutput.Stream.IsChanged = true;
+                FBoxes.SliceCount = data.Length;
+                for (int i = 0; i < data.Length; ++i)
+                {
+                    FBoxes[i] = VMath.Transform((
+                        data[i].min + data[i].max)*0.5,
+                        data[i].max - data[i].min,
+                        Vector3D.Zero);
+                }
+
+                FInvalidate = true;
+                FFirst = false;
+                FOutput.Stream.IsChanged = true;
             }
         }
 
@@ -66,14 +81,14 @@ namespace VVVV.Mirage.Nodes
             {
                 Device device = context.Device;
 
-                if (this.FOutput[0].Contains(context))
+                if (FOutput[0].Contains(context))
                 {
-                    if (this.FOutput[0][context].ElementCount != data.Length)
+                    if (FOutput[0][context].ElementCount != data.Length)
                     {
                         if (data.Length > 0)
                         {
-                            this.FOutput[0].Dispose(context);
-                            this.FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, data.Length);
+                            FOutput[0].Dispose(context);
+                            FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, data.Length);
                         }
                     }
                 }

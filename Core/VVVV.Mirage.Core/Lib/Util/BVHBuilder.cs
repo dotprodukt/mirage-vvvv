@@ -125,9 +125,9 @@ namespace VVVV.Mirage.Lib.Util
                 VMath.Min(a.min.y,b.min.y),
                 VMath.Min(a.min.z,b.min.z));
             node.max = new Vector3D(
-                VMath.Min(a.max.x, b.max.x),
-                VMath.Min(a.max.y, b.max.y),
-                VMath.Min(a.max.z, b.max.z));
+                VMath.Max(a.max.x, b.max.x),
+                VMath.Max(a.max.y, b.max.y),
+                VMath.Max(a.max.z, b.max.z));
             node.childA = (int)ia;
             node.childB = (int)ib;
             bvh.Nodes[i] = node;
