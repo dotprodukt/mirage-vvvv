@@ -73,9 +73,21 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="VVVV.Utils">
+      <HintPath>..\..\packages\VVVV.Utils.34.2.1\lib\net40\VVVV.Utils.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lib\Scene\AbstractEntity.cs" />
+    <Compile Include="Lib\Util\LBVH.cs" />
+    <Compile Include="Lib\Util\BVHBuilder.cs" />
+    <Compile Include="Lib\Scene\IEntity.cs" />
+    <Compile Include="Lib\Util\AABB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VVVV.Mirage.Nodes", "Nodes\VVVV.Mirage.Nodes\VVVV.Mirage.Nodes.csproj", "{5F8ACE45-BE76-4BD7-988D-50628F927B12}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5A6B9C7D-33AD-4547-8083-151A95166EF9} = {5A6B9C7D-33AD-4547-8083-151A95166EF9}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VVVV.Mirage.Core", "Core\VVVV.Mirage.Core\VVVV.Mirage.Core.csproj", "{5A6B9C7D-33AD-4547-8083-151A95166EF9}"
 EndProject

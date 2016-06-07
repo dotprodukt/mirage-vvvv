@@ -12,7 +12,8 @@ namespace VVVV.Mirage.Lib.Scene
 {
     public interface IEntity
     {
-        public Matrix4x4 Transform { get; set; }
-        public AABB Bounds { get; set; }
+        Matrix4x4 Transform { get; set; }
+        AABB Bounds { get; set; }
+        int Type { get; set; }
     }
 }

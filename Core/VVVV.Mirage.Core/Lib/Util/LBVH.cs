@@ -18,11 +18,11 @@ namespace VVVV.Mirage.Lib.Util
             public int childB;
         }
 
-        public uint LeafCount { public get; private set; }
-        public uint InternalCount { public get; private set; }
+        public uint LeafCount { get; private set; }
+        public uint InternalCount { get; private set; }
         public uint Count
         {
-            public get
+            get
             {
                 return InternalCount + LeafCount;
             }
@@ -30,14 +30,14 @@ namespace VVVV.Mirage.Lib.Util
 
         public uint LeafOffset
         {
-            public get
+            get
             {
                 return InternalCount;
             }
         }
         public uint InternalOffset
         {
-            public get
+            get
             {
                 return 0;
             } 
@@ -45,7 +45,7 @@ namespace VVVV.Mirage.Lib.Util
 
         private uint availInternalNodes;
 
-        public Node[] Nodes { public get; private set; }
+        public Node[] Nodes { get; private set; }
 
         public LBVH(uint capacity)
         {

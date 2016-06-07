@@ -8,7 +8,7 @@ using VVVV.Utils.VMath;
 
 namespace VVVV.Mirage.Lib.Util
 {
-    struct AABB
+    public struct AABB
     {
         public Vector3D Min;
         public Vector3D Max;
@@ -26,6 +26,12 @@ namespace VVVV.Mirage.Lib.Util
             {
                 return Max - Min;
             }
+        }
+
+        public AABB(Vector3D min, Vector3D max)
+        {
+            this.Min = min;
+            this.Max = max;
         }
 
         public AABB(Vector3D[] points)
