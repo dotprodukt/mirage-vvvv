@@ -11,15 +11,15 @@ using VVVV.Mirage.Lib.Scene;
 
 namespace VVVV.Mirage.Lib.Util
 {
-    struct BVHNode
+    /*public struct BVHNode
     {
         public Vector3D min;
         public int refA;
         public Vector3D max;
         public int refB;
-    }
+    }*/
 
-    class BVHBuilder
+    public class BVHBuilder
     {
         private LBVH bvh;
         private LeafData[] leafData;
@@ -136,9 +136,9 @@ namespace VVVV.Mirage.Lib.Util
         }
 
 
-        public void Build(List<IEntity> ents, LBVH.Node[] nodes)
+        public LBVH.Node[] Build(List<IEntity> ents)
         {
-            if (ents.Count == 0) return;
+            if (ents.Count == 0) return null;
 
             bvh = new LBVH((uint)ents.Count);
 
@@ -173,6 +173,8 @@ namespace VVVV.Mirage.Lib.Util
             Array.Sort(mortonCodes, leafData);
 
             processRange(mortonCodes, leafData, 0, bvh.LeafCount - 1);
+
+            return bvh.Nodes;
         }
     }
 }

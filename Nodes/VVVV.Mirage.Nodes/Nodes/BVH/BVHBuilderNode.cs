@@ -37,7 +37,7 @@ namespace VVVV.Mirage.Nodes
         private bool FInvalidate;
         private bool FFirst = true;
 
-
+        private LBVH.Node[] data;
 
         public void Evaluate(int spreadMax)
         {
@@ -51,7 +51,8 @@ namespace VVVV.Mirage.Nodes
 
             if (this.FApply[0] || this.FFirst)
             {
-
+                BVHBuilder builder = new BVHBuilder();
+                data = builder.Build(FEntities.ToList());
 
                 this.FInvalidate = true;
                 this.FFirst = false;
@@ -67,11 +68,26 @@ namespace VVVV.Mirage.Nodes
 
                 if (this.FOutput[0].Contains(context))
                 {
-                    
+                    if (this.FOutput[0][context].ElementCount != data.Length)
+                    {
+                        if (data.Length > 0)
+                        {
+                            this.FOutput[0].Dispose(context);
+                            this.FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, data.Length);
+                        }
+                    }
                 }
                 else
                 {
-                    FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context,10);
+                    if (data.Length > 0)
+                    {
+                        FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, data.Length);
+                    }
+                }
+
+                if (data.Length > 0)
+                {
+                    FOutput[0][context].WriteData(data);
                 }
             }
         }
@@ -86,7 +102,14 @@ namespace VVVV.Mirage.Nodes
 
         public void Dispose()
         {
-            
+            try
+            {
+                FOutput[0].Dispose();
+            }
+            catch
+            {
+
+            }
         }
     }
 }
