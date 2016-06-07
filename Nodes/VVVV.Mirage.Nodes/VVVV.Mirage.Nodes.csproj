@@ -70,6 +70,7 @@
   <ItemGroup>
     <Reference Include="FeralTic">
       <HintPath>..\..\Dependencies\x64\FeralTic.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition.CodePlex">
@@ -88,9 +89,11 @@
     </Reference>
     <Reference Include="VVVV.DX11.Core">
       <HintPath>..\..\Dependencies\x64\VVVV.DX11.Core.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="VVVV.DX11.Lib">
       <HintPath>..\..\Dependencies\x64\VVVV.DX11.Lib.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="VVVV.Utils">
       <HintPath>..\..\packages\VVVV.Utils.34.2.1\lib\net40\VVVV.Utils.dll</HintPath>
@@ -107,6 +110,7 @@
     <ProjectReference Include="..\..\Core\VVVV.Mirage.Core\VVVV.Mirage.Core.csproj">
       <Project>{5a6b9c7d-33ad-4547-8083-151a95166ef9}</Project>
       <Name>VVVV.Mirage.Core</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

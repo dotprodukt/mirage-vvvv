@@ -65,5 +65,9 @@ namespace VVVV.Mirage.Nodes
         private bool lastFrameEnd = false;
         #endregion
         #endregion
+
+        public void Evaluate(int spreadMax)
+        {
+        }
     }
 }
