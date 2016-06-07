@@ -138,7 +138,7 @@ namespace VVVV.Mirage.Lib.Util
 
         public LBVH.Node[] Build(List<IEntity> ents)
         {
-            if (ents.Count == 0) return null;
+            if (ents.Count == 0 || ents[0] == null) return null;
 
             bvh = new LBVH((uint)ents.Count);
 

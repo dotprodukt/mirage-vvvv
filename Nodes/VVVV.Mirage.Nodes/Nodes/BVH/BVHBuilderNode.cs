@@ -62,15 +62,22 @@ namespace VVVV.Mirage.Nodes
             {
                 BVHBuilder builder = new BVHBuilder();
                 data = builder.Build(FEntities.ToList());
-                FLeafOffset[0] = FEntities.SliceCount - 1;
+                FLeafOffset[0] = FEntities.SliceCount > 0 ? FEntities.SliceCount - 1 : 0;
 
-                FBoxes.SliceCount = data.Length;
-                for (int i = 0; i < data.Length; ++i)
+                if (data != null)
                 {
-                    FBoxes[i] = VMath.Transform((
-                        data[i].min + data[i].max)*0.5,
-                        data[i].max - data[i].min,
-                        Vector3D.Zero);
+                    FBoxes.SliceCount = data.Length;
+                    for (int i = 0; i < data.Length; ++i)
+                    {
+                        FBoxes[i] = VMath.Transform((
+                            data[i].min + data[i].max) * 0.5,
+                            data[i].max - data[i].min,
+                            Vector3D.Zero);
+                    }
+                }
+                else
+                {
+                    FBoxes.SliceCount = 0;
                 }
 
                 FInvalidate = true;
@@ -84,27 +91,29 @@ namespace VVVV.Mirage.Nodes
             if (this.FInvalidate)
             {
                 Device device = context.Device;
+                int len = data != null ? data.Length : 0;
+
 
                 if (FOutput[0].Contains(context))
                 {
-                    if (FOutput[0][context].ElementCount != data.Length)
+                    if (FOutput[0][context].ElementCount != len)
                     {
-                        if (data.Length > 0)
+                        if (len > 0)
                         {
                             FOutput[0].Dispose(context);
-                            FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, data.Length);
+                            FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, len);
                         }
                     }
                 }
                 else
                 {
-                    if (data.Length > 0)
+                    if (len > 0)
                     {
-                        FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, data.Length);
+                        FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, len);
                     }
                 }
 
-                if (data.Length > 0)
+                if (len > 0)
                 {
                     FOutput[0][context].WriteData(data);
                 }
