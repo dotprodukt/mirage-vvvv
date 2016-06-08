@@ -3,18 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 
+using SlimDX;
 using VVVV.Utils.VMath;
 
 namespace VVVV.Mirage.Lib.Util
 {
     public class LBVH
     {
+        [StructLayout(LayoutKind.Sequential)]
         public struct Node
         {
-            public Vector3D min;
+            public Vector3 min;
             public int childA;
-            public Vector3D max;
+            public Vector3 max;
             public int childB;
         }
 

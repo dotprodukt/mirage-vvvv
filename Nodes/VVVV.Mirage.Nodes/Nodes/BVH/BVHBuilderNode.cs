@@ -8,6 +8,7 @@ using VVVV.PluginInterfaces.V1;
 using VVVV.PluginInterfaces.V2;
 using VVVV.Utils.VMath;
 
+using SlimDX;
 using SlimDX.Direct3D11;
 
 using FeralTic.DX11;
@@ -58,19 +59,20 @@ namespace VVVV.Mirage.Nodes
                 FOutput[0] = new DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>();
             }
 
+            //FEntities.Sync();
             if ((FApply[0] || FFirst) && FEntities.SliceCount>0)
             {
                 BVHBuilder builder = new BVHBuilder();
                 data = builder.Build(FEntities.ToList());
                 FLeafOffset[0] = FEntities.SliceCount > 0 ? FEntities.SliceCount - 1 : 0;
 
-                if (data != null)
+                /*if (data != null)
                 {
                     FBoxes.SliceCount = data.Length;
                     for (int i = 0; i < data.Length; ++i)
                     {
-                        FBoxes[i] = VMath.Transform((
-                            data[i].min + data[i].max) * 0.5,
+                        FBoxes[i] = VMath.Transform(
+                            Vector3D.Multiply(data[i].min + data[i].max,0.5f),
                             data[i].max - data[i].min,
                             Vector3D.Zero);
                     }
@@ -78,7 +80,7 @@ namespace VVVV.Mirage.Nodes
                 else
                 {
                     FBoxes.SliceCount = 0;
-                }
+                }*/
 
                 FInvalidate = true;
                 FFirst = false;

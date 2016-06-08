@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using SlimDX;
 using VVVV.Utils.VMath;
 
 using VVVV.Mirage.Lib.Scene;
@@ -28,11 +29,13 @@ namespace VVVV.Mirage.Lib.Util
         private class LeafData
         {
             public IEntity entity;
+            public int index;
             public AABB bounds;
 
-            public LeafData(IEntity entity, AABB bounds)
+            public LeafData(IEntity entity, int index, AABB bounds)
             {
                 this.entity = entity;
+                this.index = index;
                 this.bounds = bounds;
             }
         }
@@ -102,8 +105,10 @@ namespace VVVV.Mirage.Lib.Util
             LBVH.Node node = new LBVH.Node();
             if (first == last)
             {
-                node.min = leafData[first].bounds.Min;
-                node.max = leafData[first].bounds.Max;
+                Vector3D min = leafData[first].bounds.Min;
+                Vector3D max = leafData[first].bounds.Max;
+                node.min = new Vector3((float)min.x, (float)min.y, (float)min.z);
+                node.max = new Vector3((float)max.x, (float)max.y, (float)max.z);
                 node.childA = (int)first;
                 node.childB = 0;
                 i = first + bvh.LeafOffset;
@@ -120,14 +125,14 @@ namespace VVVV.Mirage.Lib.Util
 
             LBVH.Node a = bvh.Nodes[ia];
             LBVH.Node b = bvh.Nodes[ib];
-            node.min = new Vector3D(
-                VMath.Min(a.min.x,b.min.x),
-                VMath.Min(a.min.y,b.min.y),
-                VMath.Min(a.min.z,b.min.z));
-            node.max = new Vector3D(
-                VMath.Max(a.max.x, b.max.x),
-                VMath.Max(a.max.y, b.max.y),
-                VMath.Max(a.max.z, b.max.z));
+            node.min = new Vector3(
+                Math.Min(a.min.X,b.min.X),
+                Math.Min(a.min.Y,b.min.Y),
+                Math.Min(a.min.Z,b.min.Z));
+            node.max = new Vector3(
+                Math.Max(a.max.X, b.max.X),
+                Math.Max(a.max.Y, b.max.Y),
+                Math.Max(a.max.Z, b.max.Z));
             node.childA = (int)ia;
             node.childB = (int)ib;
             bvh.Nodes[i] = node;
@@ -151,7 +156,7 @@ namespace VVVV.Mirage.Lib.Util
             for (int i = 0; i < bvh.LeafCount; ++i)
             {
                 AABB tb = AABB.Transform(ents[i].Bounds, ents[i].Transform);
-                leafData[i] = new LeafData(ents[i], tb);
+                leafData[i] = new LeafData(ents[i], i, tb);
                 if (i == 0)
                 {
                     globalBounds = tb;
