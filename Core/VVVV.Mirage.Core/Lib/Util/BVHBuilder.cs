@@ -109,8 +109,8 @@ namespace VVVV.Mirage.Lib.Util
                 Vector3D max = leafData[first].bounds.Max;
                 node.min = new Vector3((float)min.x, (float)min.y, (float)min.z);
                 node.max = new Vector3((float)max.x, (float)max.y, (float)max.z);
-                node.childA = (int)first;
-                node.childB = 0;
+                node.childA = leafData[first].entity.Type;
+                node.childB = leafData[first].index;
                 i = first + bvh.LeafOffset;
                 bvh.Nodes[i] = node;
                 return i;
