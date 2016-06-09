@@ -3,11 +3,11 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Import Project="$(SolutionDir)\vvvv.Mirage.Build.targets" />
   <PropertyGroup>
-    <ProjectGuid>{5A6B9C7D-33AD-4547-8083-151A95166EF9}</ProjectGuid>
+    <ProjectGuid>{F7B0CC3C-F646-442A-926E-EBC2DAD0C03A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>VVVV.Mirage.Core</RootNamespace>
-    <AssemblyName>VVVV.Mirage.Core</AssemblyName>
+    <RootNamespace>VVVV.Mirage.Lib</RootNamespace>
+    <AssemblyName>VVVV.Mirage.Lib</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <OutputPath>$(OutputPath)\core\</OutputPath>
   </PropertyGroup>
@@ -21,7 +21,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Scene\AbstractEntity.cs" />
+    <Compile Include="Scene\IEntity.cs" />
+    <Compile Include="Util\AABB.cs" />
+    <Compile Include="Util\BVHBuilder.cs" />
+    <Compile Include="Util\LBVH.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\VVVV.Mirage.Core\VVVV.Mirage.Core.csproj">
+      <Project>{5A6B9C7D-33AD-4547-8083-151A95166EF9}</Project>
+      <Name>VVVV.Mirage.Core</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
