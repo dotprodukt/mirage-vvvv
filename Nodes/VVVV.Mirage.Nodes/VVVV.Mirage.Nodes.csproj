@@ -24,6 +24,7 @@
     <Compile Include="Nodes\Animation\NRTControllerNode.cs" />
     <Compile Include="Nodes\BVH\BVHBuilderNode.cs" />
     <Compile Include="Nodes\Scene\AbstractEntityNode.cs" />
+    <Compile Include="Nodes\Scene\ConsEntityNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
