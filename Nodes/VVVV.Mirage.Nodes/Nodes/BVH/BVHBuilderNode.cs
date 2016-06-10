@@ -32,19 +32,19 @@ namespace VVVV.Mirage.Nodes
         [Input("Apply", IsBang=true, DefaultValue=1)]
         protected ISpread<bool> FApply;
 
+        [Output("Leaf Offset")]
+        protected ISpread<int> FLeafOffset;
+
         [Output("Node Buffer", IsSingle=true)]
         protected ISpread<DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>> FNodeBuffer;
 
         [Output("Transform Buffer", IsSingle = true)]
         protected ISpread<DX11Resource<DX11DynamicStructuredBuffer<Matrix>>> FTransformBuffer;
 
-        [Output("Box Transforms")]
+        [Output("Box Transforms", Order=2)]
         protected ISpread<Matrix4x4> FBoxes;
 
-        [Output("Leaf Offset")]
-        protected ISpread<int> FLeafOffset;
-
-        [Output("Is Valid")]
+        [Output("Is Valid", Order=3)]
         protected ISpread<bool> FValid;
 
         private bool FInvalidate;
@@ -73,24 +73,28 @@ namespace VVVV.Mirage.Nodes
             {
                 BVHBuilder builder = new BVHBuilder();
                 node_data = builder.Build(FEntities.ToList());
-                transform_data = builder.GetTransformsForLastBuild();
                 FLeafOffset[0] = FEntities.SliceCount > 0 ? FEntities.SliceCount - 1 : 0;
 
-                /*if (data != null)
+                if (node_data != null)
                 {
-                    FBoxes.SliceCount = data.Length;
-                    for (int i = 0; i < data.Length; ++i)
+                    transform_data = builder.GetTransformsForLastBuild();
+
+                    FBoxes.SliceCount = node_data.Length;
+                    for (int i = 0; i < node_data.Length; ++i)
                     {
+                        LBVH.Node node = node_data[i];
+                        Vector3 min = node_data[i].min;
+                        Vector3 max = node_data[i].max;
                         FBoxes[i] = VMath.Transform(
-                            Vector3D.Multiply(data[i].min + data[i].max,0.5f),
-                            data[i].max - data[i].min,
+                            (new Vector3D(min.X + max.X, min.Y + max.Y, min.Z + max.Z))*0.5,
+                            new Vector3D(max.X - min.X, max.Y - min.Y, max.Z - min.Z),
                             Vector3D.Zero);
                     }
                 }
                 else
                 {
                     FBoxes.SliceCount = 0;
-                }*/
+                }
 
                 FInvalidate = true;
                 FFirst = false;
