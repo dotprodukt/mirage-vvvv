@@ -32,6 +32,12 @@ namespace VVVV.Mirage.Nodes
         [Input("Apply", IsBang=true, DefaultValue=1)]
         protected ISpread<bool> FApply;
 
+        [Output("Node Count")]
+        protected ISpread<int> FNodeCount;
+
+        [Output("Leaf Count")]
+        protected ISpread<int> FLeafCount;
+
         [Output("Leaf Offset")]
         protected ISpread<int> FLeafOffset;
 
@@ -73,6 +79,8 @@ namespace VVVV.Mirage.Nodes
             {
                 BVHBuilder builder = new BVHBuilder();
                 node_data = builder.Build(FEntities.ToList());
+                FNodeCount[0] = node_data.Length;
+                FLeafCount[0] = FEntities.SliceCount;
                 FLeafOffset[0] = FEntities.SliceCount > 0 ? FEntities.SliceCount - 1 : 0;
 
                 if (node_data != null)
