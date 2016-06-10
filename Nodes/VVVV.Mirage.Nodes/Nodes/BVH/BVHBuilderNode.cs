@@ -33,7 +33,10 @@ namespace VVVV.Mirage.Nodes
         protected ISpread<bool> FApply;
 
         [Output("Node Buffer", IsSingle=true)]
-        protected ISpread<DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>> FOutput;
+        protected ISpread<DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>> FNodeBuffer;
+
+        [Output("Transform Buffer", IsSingle = true)]
+        protected ISpread<DX11Resource<DX11DynamicStructuredBuffer<Matrix>>> FTransformBuffer;
 
         [Output("Box Transforms")]
         protected ISpread<Matrix4x4> FBoxes;
@@ -47,23 +50,30 @@ namespace VVVV.Mirage.Nodes
         private bool FInvalidate;
         private bool FFirst = true;
 
-        private LBVH.Node[] data;
+        private LBVH.Node[] node_data;
+        private Matrix[] transform_data;
 
         public void Evaluate(int spreadMax)
         {
-            FOutput.SliceCount = 1;
+            FNodeBuffer.SliceCount = 1;
+            FTransformBuffer.SliceCount = 1;
             FInvalidate = false;
 
-            if (FOutput[0] == null)
+            if (FNodeBuffer[0] == null)
             {
-                FOutput[0] = new DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>();
+                FNodeBuffer[0] = new DX11Resource<DX11DynamicStructuredBuffer<LBVH.Node>>();
+            }
+            if (FTransformBuffer[0] == null)
+            {
+                FTransformBuffer[0] = new DX11Resource<DX11DynamicStructuredBuffer<Matrix>>();
             }
 
             //FEntities.Sync();
-            if ((FApply[0] || FFirst) && FEntities.SliceCount>0)
+            if (FApply[0] || FFirst)
             {
                 BVHBuilder builder = new BVHBuilder();
-                data = builder.Build(FEntities.ToList());
+                node_data = builder.Build(FEntities.ToList());
+                transform_data = builder.GetTransformsForLastBuild();
                 FLeafOffset[0] = FEntities.SliceCount > 0 ? FEntities.SliceCount - 1 : 0;
 
                 /*if (data != null)
@@ -84,26 +94,27 @@ namespace VVVV.Mirage.Nodes
 
                 FInvalidate = true;
                 FFirst = false;
-                FOutput.Stream.IsChanged = true;
+                FNodeBuffer.Stream.IsChanged = true;
+                FTransformBuffer.Stream.IsChanged = true;
             }
         }
 
         public void Update(IPluginIO pin, DX11RenderContext context)
         {
-            if (this.FInvalidate)
+            if (FInvalidate)
             {
                 Device device = context.Device;
-                int len = data != null ? data.Length : 0;
+                int len = node_data != null ? node_data.Length : 0;
 
 
-                if (FOutput[0].Contains(context))
+                if (FNodeBuffer[0].Contains(context))
                 {
-                    if (FOutput[0][context].ElementCount != len)
+                    if (FNodeBuffer[0][context].ElementCount != len)
                     {
                         if (len > 0)
                         {
-                            FOutput[0].Dispose(context);
-                            FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, len);
+                            FNodeBuffer[0].Dispose(context);
+                            FNodeBuffer[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, len);
                         }
                     }
                 }
@@ -111,13 +122,39 @@ namespace VVVV.Mirage.Nodes
                 {
                     if (len > 0)
                     {
-                        FOutput[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, len);
+                        FNodeBuffer[0][context] = new DX11DynamicStructuredBuffer<LBVH.Node>(context, len);
                     }
                 }
 
                 if (len > 0)
                 {
-                    FOutput[0][context].WriteData(data);
+                    FNodeBuffer[0][context].WriteData(node_data);
+                }
+
+                len *= 2;
+
+                if (FTransformBuffer[0].Contains(context))
+                {
+                    if (FTransformBuffer[0][context].ElementCount != len)
+                    {
+                        if (len > 0)
+                        {
+                            FTransformBuffer[0].Dispose(context);
+                            FTransformBuffer[0][context] = new DX11DynamicStructuredBuffer<Matrix>(context, len);
+                        }
+                    }
+                }
+                else
+                {
+                    if (len > 0)
+                    {
+                        FTransformBuffer[0][context] = new DX11DynamicStructuredBuffer<Matrix>(context, len);
+                    }
+                }
+
+                if (len > 0)
+                {
+                    FTransformBuffer[0][context].WriteData(transform_data);
                 }
             }
         }
@@ -126,7 +163,8 @@ namespace VVVV.Mirage.Nodes
         {
             if (force)
             {
-                FOutput[0].Dispose(context);
+                FNodeBuffer[0].Dispose(context);
+                FTransformBuffer[0].Dispose(context);
             }
         }
 
@@ -134,7 +172,8 @@ namespace VVVV.Mirage.Nodes
         {
             try
             {
-                FOutput[0].Dispose();
+                FNodeBuffer[0].Dispose();
+                FTransformBuffer[0].Dispose();
             }
             catch
             {

@@ -181,5 +181,21 @@ namespace VVVV.Mirage.Lib.Util
 
             return bvh.Nodes;
         }
+
+        public Matrix[] GetTransformsForLastBuild()
+        {
+            int leafCount = (int)bvh.LeafCount;
+            Matrix[] data = new Matrix[leafCount*2];
+
+            for (int i = 0; i < leafCount; ++i)
+            {
+                Matrix T = Matrix.Transpose(leafData[i].entity.Transform.ToSlimDXMatrix());
+                Matrix Ti = Matrix.Invert(T);
+                data[i * 2] = T;
+                data[i * 2 + 1] = Ti;
+            }
+
+            return data;
+        }
     }
 }
