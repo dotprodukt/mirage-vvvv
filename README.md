@@ -8,4 +8,13 @@ There is no support for triangle based geometry right now and I personnaly have 
 
 Mirage is targeted primarily at distance field based geometries or any other kind of abstract form that would need to be implemented in shader code.  I'm trying to handle types of objects that would typically be difficult produce and render efficiently with currently available tools.
 
-One of the main core features of Mirage is the use of a BVH to dramatically accelerate ray traversal.
+## Features
+Much of this doesn't exist yet, but this is what we're aiming for...
++ BVH to accelerate ray traversal.
++ Realtime Physically Based Renderer
++ Physically Based Monte-Carlo Pathtracer
++ Unified Material Model
++ Support for Radiometric or Photometric input data (color, lights, etc...)
++ Easy to use HLSL library for creating objects, materials and overall consistent interaction within the pipeline.
++ Nodes for aiding in the management and control of scenes and rendering processes.
++ More to come...
