@@ -17,6 +17,10 @@
       <HintPath>$(SolutionDir)\Dependencies\$(Platform)\VVVV.Utils3rdParty.dll</HintPath>
 	  <Private>False</Private>
     </Reference>
+    <Reference Include="VVVV.Hosting">
+      <HintPath>$(SolutionDir)\Dependencies\$(Platform)\VVVV.Hosting.dll</HintPath>
+	  <Private>False</Private>
+    </Reference>
     <Reference Include="VVVV.PluginInterfaces">
       <HintPath>$(SolutionDir)\Dependencies\$(Platform)\VVVV.PluginInterfaces.dll</HintPath>
 	  <Private>False</Private>
