@@ -1,4 +1,6 @@
 # Mirage
+
+[![Join the chat at https://gitter.im/mirage-vvvv/Lobby](https://badges.gitter.im/mirage-vvvv/Lobby.svg)](https://gitter.im/mirage-vvvv/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 Physically based rendering in vvvv
 
 ## About
